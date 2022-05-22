@@ -42,18 +42,20 @@ type manifest struct {
 	Pages       []page `json:"pages"`
 }
 
-type bySortOrder []page
-
-func (p bySortOrder) Len() int {
-	return len(p)
+func (p manifest) Len() int {
+	return len(p.Pages)
 }
 
-func (p bySortOrder) Swap(i, j int) {
-	p[i], p[j] = p[j], p[i]
+func (p manifest) Swap(i, j int) {
+	p.Pages[i], p.Pages[j] = p.Pages[j], p.Pages[i]
 }
 
-func (p bySortOrder) Less(i, j int) bool {
-	return p[i].SortOrder < p[j].SortOrder
+func (p manifest) Less(i, j int) bool {
+	if p.RightToLeft {
+		return p.Pages[i].SortOrder > p.Pages[j].SortOrder
+	} else {
+		return p.Pages[i].SortOrder < p.Pages[j].SortOrder
+	}
 }
 
 func checkedClose(c io.Closer, err *error) {
@@ -112,13 +114,12 @@ func convert(inputFiles map[string]inputFile) ([]outputFile, error) {
 		return nil, errors.New("No pages found inside archive")
 	}
 
-	pages := bySortOrder(manifest.Pages)
-	sort.Sort(pages)
+	sort.Sort(manifest)
 
-	outputFiles := make([]outputFile, len(pages))
-	numberOfDigits := int(math.Floor(math.Log10(float64(len(pages)))) + 1)
+	outputFiles := make([]outputFile, len(manifest.Pages))
+	numberOfDigits := int(math.Floor(math.Log10(float64(len(manifest.Pages)))) + 1)
 
-	for i, page := range pages {
+	for i, page := range manifest.Pages {
 		image, ok := inputFiles[page.SourceImage]
 
 		if !ok {
