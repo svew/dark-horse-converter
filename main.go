@@ -143,7 +143,11 @@ func convert(inputFiles map[string]inputFile) ([]outputFile, error) {
 			return nil, errors.New("Unknown image type found inside archive")
 		}
 
-		format := fmt.Sprintf("%%0%dd%s", numberOfDigits, extensions[0])
+		ext := extensions[0]
+		if ext == ".jfif" {
+			ext = ".jpeg"
+		}
+		format := fmt.Sprintf("%%0%dd%s", numberOfDigits, ext)
 		header.Name = fmt.Sprintf(format, i+1)
 		outputFiles[i] = outputFile{header: header, content: image.content}
 	}
