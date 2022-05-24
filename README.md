@@ -7,23 +7,20 @@ Easiest way to download Dark Horse comics is by using [Dark Horse downloader](ht
 
 If you don't want to install the extension, you can do it manually (following steps apply to Chrome web browser on Max OS X, but shouldn't be much different for any other OS/browser combination).
 
-1) Open Chrome and go to [your library](https://digital.darkhorse.com/library/).
+1. Open a web browser and go to [your bookshelf](https://digital.darkhorse.com/bookshelf).
 
-2) Click on the comic book you want to convert.
+2. Click on the comic book you want to convert.
 
-3) View page source by clicking View -> Developer -> View source.
+3. View page source
 
-4) Find and click the link containing string "manifest.jsonp".
+    - In Chrome, click View -> Developer -> View source.
+    - In Firefox, Ctrl+U
 
-5) When download is finished, open manifest.jsonp in any text editor.
+4. Search for the `bookreader-content` element in the page (Ctrl+F)
 
-6) Find the line line looking like this:
+5. The line below should look something like this: `<a href="/books/9f1bb1e5dd524127bbdd0bba39d022e2">`. The long string of characters is the book uuid
 
-```
-"book_uuid": "9f1bb1e5dd524127bbdd0bba39d022e2"
-```
-
-7) Construct the tar archive link for the comic by replacing {uuid} part of the following string with the book_uuid that you found:
+6. Construct the tar archive link for the comic by replacing {uuid} part of the following string with the book_uuid that you found:
 
 ```
 https://digital.darkhorse.com/api/v6/book/{uuid}
@@ -35,7 +32,7 @@ In this example, final link would look like this:
 https://digital.darkhorse.com/api/v6/book/9f1bb1e5dd524127bbdd0bba39d022e2
 ```
 
-8) Visit constructed link in Chrome to download the tar archive.
+8) Visit constructed link in your web browser to download the tar archive.
 
 ## Installation
 
